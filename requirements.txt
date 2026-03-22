@@ -1,0 +1,23 @@
+# Web framework
+fastapi==0.115.0
+uvicorn[standard]==0.30.0
+python-dotenv==1.0.0
+
+# Pydantic for request/response validation
+pydantic==2.7.0
+
+# Supabase client
+supabase==2.5.0
+
+# HTTP client (async)
+httpx==0.27.0
+
+# LLM interface (OpenAI-compatible — works with Gemini endpoint)
+openai==1.30.0
+
+# Utility
+typing-extensions==4.11.0
+
+# OASIS multi-agent simulation
+camel-ai>=0.2.0
+oasis-sim>=0.1.0

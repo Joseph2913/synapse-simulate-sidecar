@@ -1,0 +1,30 @@
+# Environment
+.env
+venv/
+venv*/
+.venv/
+Python-3.12.13/
+
+# Runtime data
+log/
+uploads/
+debate_viewer/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+*.egg
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
