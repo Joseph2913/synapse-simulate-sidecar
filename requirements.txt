@@ -6,13 +6,15 @@ python-dotenv>=1.0.0
 # Pydantic for request/response validation
 pydantic>=2.7.0,<3.0
 
-# Supabase client (>=2.6 needed for httpx>=0.28 compat with camel-ai)
+# Supabase client (>=2.9 for httpx>=0.28 compat with camel-ai)
 supabase>=2.9.0
 
 # LLM interface (OpenAI-compatible — works with Gemini endpoint)
 openai>=1.30.0
 
-# OASIS multi-agent simulation (not on PyPI — install from GitHub)
-# camel-oasis requires camel-ai==0.2.78 and Python >=3.10,<3.12
+# OASIS multi-agent simulation
+# camel-ai is the core agent framework; camel-oasis adds the social sim layer.
+# camel-oasis is not on PyPI — installed from GitHub with --no-deps to avoid
+# pulling in heavy transitive deps (torch, sentence-transformers, neo4j, pandas)
+# that are only used in code paths we don't call.
 camel-ai==0.2.78
-camel-oasis @ git+https://github.com/camel-ai/oasis.git@v0.2.5
