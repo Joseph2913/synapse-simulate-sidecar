@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from typing import Optional, Literal
+from typing import Optional, Literal, Union
 
 class SimulationNode(BaseModel):
     id: str
@@ -67,9 +67,9 @@ class SimulationPersona(BaseModel):
     epistemic_style: str = 'cautious'
     question_specific_stance: str = ''
     stance_category: str = 'neutral'
-    update_conditions: list[str] = []
+    update_conditions: Union[str, list[str]] = ''
     grounding_chunk_ids: list[str] = []
-    inter_agent_relationships: list[dict] = []
+    inter_agent_relationships: Union[list[str], list[dict]] = []
     # Legacy fields (for backward compat with existing sidecar contract)
     node_id: str = ''
     is_anchor: bool = False
