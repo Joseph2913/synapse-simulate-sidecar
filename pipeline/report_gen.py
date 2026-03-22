@@ -6,10 +6,16 @@ from models.simulation_report import SimulationReport, SimulationForecast, Simul
 from pipeline.simulation_runner import SimulationResult
 from pipeline.environment_setup import SimulationEnvironment
 
-client = AsyncOpenAI(
-    api_key=os.getenv("LLM_API_KEY"),
-    base_url=os.getenv("LLM_BASE_URL"),
-)
+_client = None
+
+def _get_client() -> AsyncOpenAI:
+    global _client
+    if _client is None:
+        _client = AsyncOpenAI(
+            api_key=os.getenv("LLM_API_KEY"),
+            base_url=os.getenv("LLM_BASE_URL"),
+        )
+    return _client
 
 REPORT_SYSTEM_PROMPT = """You are a prediction analyst synthesising the results of a multi-agent social simulation.
 You will receive a log of agent interactions, final agent states, and the original prediction question.
@@ -89,7 +95,7 @@ EMERGENT SIGNALS DETECTED:
 Produce a prediction report in this exact JSON schema:
 {json.dumps(schema, indent=2)}"""
 
-    response = await client.chat.completions.create(
+    response = await _get_client().chat.completions.create(
         model=os.getenv("LLM_MODEL_NAME", "gemini-2.0-flash"),
         messages=[
             {"role": "system", "content": REPORT_SYSTEM_PROMPT},

@@ -19,10 +19,16 @@ from openai import AsyncOpenAI
 from models.agent import SimulationAgent
 from pipeline.environment_setup import SimulationEnvironment
 
-client = AsyncOpenAI(
-    api_key=os.getenv("LLM_API_KEY"),
-    base_url=os.getenv("LLM_BASE_URL"),
-)
+_client = None
+
+def _get_client() -> AsyncOpenAI:
+    global _client
+    if _client is None:
+        _client = AsyncOpenAI(
+            api_key=os.getenv("LLM_API_KEY"),
+            base_url=os.getenv("LLM_BASE_URL"),
+        )
+    return _client
 
 MODEL = os.getenv("LLM_MODEL_NAME", "gemini-2.0-flash")
 
@@ -212,7 +218,7 @@ Persona: {agent.personality_prompt}
 
 Post your initial position on this prediction question. What do you believe will happen and why?"""
 
-        response = await client.chat.completions.create(
+        response = await _get_client().chat.completions.create(
             model=MODEL,
             messages=[
                 {"role": "system", "content": INITIAL_POST_SYSTEM},
@@ -251,7 +257,7 @@ RECENT DISCUSSION:
 Respond to the discussion. You may agree, disagree, challenge, or add a new perspective.
 Reference specific participants by name when engaging with their points."""
 
-        response = await client.chat.completions.create(
+        response = await _get_client().chat.completions.create(
             model=MODEL,
             messages=[
                 {"role": "system", "content": REPLY_SYSTEM},

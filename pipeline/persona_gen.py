@@ -8,10 +8,16 @@ MAX_AGENTS = int(os.getenv("MAX_AGENTS", 30))
 
 AGENT_ENTITY_TYPES = {"Person", "Organization", "Team"}
 
-client = AsyncOpenAI(
-    api_key=os.getenv("LLM_API_KEY"),
-    base_url=os.getenv("LLM_BASE_URL"),
-)
+_client = None
+
+def _get_client() -> AsyncOpenAI:
+    global _client
+    if _client is None:
+        _client = AsyncOpenAI(
+            api_key=os.getenv("LLM_API_KEY"),
+            base_url=os.getenv("LLM_BASE_URL"),
+        )
+    return _client
 
 def compute_influence(node: SimulationNode) -> str:
     """Derive influence tier from centrality + anchor status."""
@@ -68,7 +74,7 @@ Prediction context: {prediction_question}
 
 Write a behavioural persona for this entity as a simulation agent."""
 
-    response = await client.chat.completions.create(
+    response = await _get_client().chat.completions.create(
         model=os.getenv("LLM_MODEL_NAME", "gemini-2.0-flash"),
         messages=[
             {"role": "system", "content": system},
